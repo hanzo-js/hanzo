@@ -1,0 +1,23 @@
+{
+  "name": "hanzo",
+  "version": "2.0.0",
+  "description": "Hanzo — the CLI and the client, in one install.",
+  "license": "BSD-3-Clause",
+  "repository": { "type": "git", "url": "git+https://github.com/hanzo-js/hanzo.git" },
+  "homepage": "https://hanzo.ai",
+  "bin": { "hanzo": "bin/hanzo.js" },
+  "type": "module",
+  "types": "./cloud.d.ts",
+  "exports": {
+    ".":      { "types": "./cloud.d.ts", "import": "./cloud.mjs", "require": "./cloud.cjs" },
+    "./ai":   { "types": "./ai.d.ts",    "import": "./ai.mjs",    "require": "./ai.cjs" },
+    "./package.json": "./package.json"
+  },
+  "files": ["bin", "cloud.mjs", "cloud.cjs", "cloud.d.ts", "ai.mjs", "ai.cjs", "ai.d.ts", "README.md"],
+  "dependencies": {
+    "@hanzo/cli": "^1.9.57",
+    "@hanzo/ai": "^0.3.8",
+    "hanzoai": "^2.2.10"
+  },
+  "engines": { "node": ">=18" }
+}
