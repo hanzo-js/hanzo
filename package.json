@@ -1,7 +1,7 @@
 {
   "name": "hanzo",
-  "version": "1.0.3",
-  "description": "Hanzo — the CLI and the client, in one install.",
+  "version": "8.5.157",
+  "description": "Hanzo \u2014 the CLI and the client, in one install.",
   "license": "BSD-3-Clause",
   "repository": {
     "type": "git",
@@ -37,9 +37,9 @@
     "README.md"
   ],
   "dependencies": {
-    "@hanzo/cli": "^1.9.57",
-    "@hanzo/ai": "^0.3.8",
-    "hanzoai": "^2.2.10"
+    "@hanzo/cli": "^8.5.156",
+    "@hanzo/ai": "^0.6.16",
+    "hanzoai": "^8.5.157"
   },
   "engines": {
     "node": ">=18"
