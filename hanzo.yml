@@ -1,0 +1,41 @@
+# Hanzo CI — the ONE way this repo is gated, read by hanzoai/ci.
+#
+# No `images:` and no `deploy:`: this is the entry package. A consumer installs
+# it from npm, so what CI owes is a gate, not an artifact.
+
+test:
+  - name: entry resolves
+    # This package is four lines of re-export and a bin shim, so the only thing
+    # worth asserting is that installing it gives you a working CLI and a client
+    # — which is exactly what a stale manifest takes away without changing a
+    # single line of code here.
+    run: |
+      set -e
+      npm install --no-audit --no-fund
+      node bin/hanzo.js --version
+      node -e "import('./cloud.mjs').then(m => {
+        if (typeof m.TeamApi !== 'function') { console.error('cloud.mjs re-exports no TeamApi'); process.exit(1) }
+      })"
+
+  - name: the client is this release
+    # THE GATE THAT WOULD HAVE CAUGHT IT. This manifest sat at 1.0.3 pinning
+    # hanzoai ^2.2.10 while npm had served 8.5.90 since August: a caret on major
+    # 2 can never resolve to 8.x, so publishing from the checkout would have
+    # moved `latest` backward and shipped a client five majors behind the one the
+    # fleet generates. Nothing failed, because nothing asked.
+    #
+    # Versions follow the PRODUCT here, not the package — every client of a
+    # release carries the release's number — so the major this package declares
+    # and the major it resolves are one fact, and this is where they are compared.
+    run: |
+      set -e
+      npm install --no-audit --no-fund
+      node -e "
+        const mine = require('./package.json').version.split('.')[0]
+        const got  = require('hanzoai/package.json').version
+        if (got.split('.')[0] !== mine) {
+          console.error('hanzo ' + mine + '.x resolves hanzoai ' + got + ' — the client is not this release')
+          process.exit(1)
+        }
+        console.log('hanzo ' + mine + '.x resolves hanzoai ' + got)
+      "
